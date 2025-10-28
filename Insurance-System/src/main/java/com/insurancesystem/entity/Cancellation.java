@@ -3,6 +3,17 @@ package com.insurancesystem.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+
+/**
+ * The entity represents a record of a cancelled insurance policy.
+ * It stores information such as the cancellation date, refund amount, 
+ * and the associated policy purchase reference.
+ *
+ * @author Ameya Shingane
+ * @version 1.0
+ * 
+ */
+
 @Entity
 @Table(name = "cancellation")
 public class Cancellation {

@@ -11,6 +11,20 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+
+/*
+ * Implementation of the CancellationService interface.
+ * This service handles the logic for policy cancellation including:
+ * - Checking if a policy is expired or already cancelled.
+ * - Calculating the refund based on remaining policy days.
+ * - Creating a record in the cancellation table.
+ * - Updating the policy purchase status to CANCELLED.
+ *
+ * @author Ameya Shingane
+ * @version 1.0
+ * 
+ */
+
 @Service
 public class CancellationServiceImpl implements CancellationService  {
 
@@ -36,10 +50,10 @@ public class CancellationServiceImpl implements CancellationService  {
         }
 
         // Calculate refund based on remaining days
-        long totalDays = ChronoUnit.DAYS.between(purchase.getPolicyStartDate(), purchase.getPolicyEndDate());
-        long remainingDays = ChronoUnit.DAYS.between(LocalDate.now(), purchase.getPolicyEndDate());
+        long totalDays = ChronoUnit.DAYS.between(purchase.getPolicyStartDate(), purchase.getPolicyEndDate());//Calculate total policy duration
+        long remainingDays = ChronoUnit.DAYS.between(LocalDate.now(), purchase.getPolicyEndDate());//Calculate remaining days
 
-        double refund = (purchase.getPremiumAmount() * remainingDays) / totalDays;
+        double refund = (purchase.getPremiumAmount() * remainingDays) / totalDays;//Calculate refund
 
         // Create cancellation record
         Cancellation cancellation = new Cancellation();
