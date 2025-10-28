@@ -4,5 +4,5 @@ import com.insurancesystem.entity.User;
 
 public interface UserService {
 
-	public User saveUser(User user);
+	public User userGetRegister(User user);
 }

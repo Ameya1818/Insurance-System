@@ -1,73 +1,80 @@
 package com.insurancesystem.entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+
+import java.util.List;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-//Define a Role entity to manage permissions like USER, ADMIN, UNDERWRITER for authorization checks.
+
 /**
- * This class handles Role entities.
+ * Entity representing user roles such as ADMIN, USER, or UNDERWRITER.
+ * Includes role name, description, and user mapping.
  *
  * @author Nikita Mahajan
  * @since 2025-10-21
  */
 @Entity
-@Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = "roleName") }) // Prevent duplicate role
-																							// names at DB level
+@Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = "roleName") })
 public class Role {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long roleId;
-	@NotBlank(message="role name must be required")
-	@Size(min = 3, max = 20, message = "Role name must be between 3 and 20 characters")
-	@Column(nullable = false, unique = true)
-	private String roleName;
-	@NotBlank(message="description does not empty")
-	@Column(nullable = false)
-	private String description;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long roleId;
 
-	public Role() {
-       
-	}
+    @NotBlank(message = "Role name is required")
+    @Size(min = 3, max = 20, message = "Role name must be between 3 and 20 characters")
+    @Column(nullable = false, unique = true)
+    private String roleName;
 
-	public Role(Long roleId, String roleName, String description) {
-		this.roleId = roleId;
-		this.roleName = roleName;
-		this.description = description;
-	}
+    @NotBlank(message = "Description cannot be empty")
+    @Column(nullable = false)
+    private String description;
 
-	public Long getRoleId() {
-		return roleId;
-	}
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private List<UserRegistration> userList;
 
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
-	}
+    public Role() {
+    }
 
-	public String getRoleName() {
-		return roleName;
-	}
+    public Role(Long roleId, String roleName, String description) {
+        this.roleId = roleId;
+        this.roleName = roleName;
+        this.description = description;
+    }
 
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
+    public Long getRoleId() {
+        return roleId;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getRoleName() {
+        return roleName;
+    }
 
-	@Override
-	public String toString() {
-		return "Role [roleId=" + roleId + ", roleName=" + roleName + ", description=" + description + "]";
-	}
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<UserRegistration> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<UserRegistration> userList) {
+        this.userList = userList;
+    }
+
+    @Override
+    public String toString() {
+        return "Role [roleId=" + roleId + ", roleName=" + roleName + ", description=" + description + "]";
+    }
 }
