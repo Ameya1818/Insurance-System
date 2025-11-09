@@ -1,8 +1,5 @@
 package com.insurancesystem.service;
 
-import java.time.LocalDate;
-
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import com.insurancesystem.repository.PolicyCategoryRepository;

@@ -1,9 +1,8 @@
 package com.insurancesystem.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
