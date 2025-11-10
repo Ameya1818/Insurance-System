@@ -10,10 +10,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 //Define a Role entity to manage permissions like USER, ADMIN, UNDERWRITER for authorization checks.
 /**
- * This class handles Role entities.
- *
  * @author Nikita Mahajan
- * @since 2025-10-21
+ * @since 2025-10-20
+ * @description This class handles Role entities.
  */
 @Entity
 @Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = "roleName") }) // Prevent duplicate role

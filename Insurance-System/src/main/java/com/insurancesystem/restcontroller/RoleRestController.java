@@ -7,7 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.insurancesystem.entity.Role;
 import com.insurancesystem.exception.RoleNotFoundException;
 import com.insurancesystem.repository.RoleRepository;
-
+/**
+ * @author Nikita Mahajan
+ * @since 2025-10-20
+ * @description Controller handling API requests related to Role.
+ */
 @RestController
 public class RoleRestController {
 	

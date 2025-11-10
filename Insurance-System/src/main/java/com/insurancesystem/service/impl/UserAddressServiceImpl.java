@@ -12,9 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.insurancesystem.entity.UserAddress;
 import com.insurancesystem.repository.UserAddressRepository;
+import com.insurancesystem.service.UserAddressService;
 
 @Service
-public class UserAddressServiceImpl {
+public class UserAddressServiceImpl implements UserAddressService{
 
 	@Autowired
 	private final UserAddressRepository repository;

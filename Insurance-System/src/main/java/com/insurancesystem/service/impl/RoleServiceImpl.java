@@ -7,6 +7,11 @@ import org.springframework.stereotype.Service;
 import com.insurancesystem.entity.Role;
 import com.insurancesystem.repository.RoleRepository;
 import com.insurancesystem.service.RoleService;
+/**
+ * @author Nikita Mahajan
+ * @since 2025-10-20
+ * @description Service implementation class that handles the business logic for Role.
+ */
 @Service
 public class RoleServiceImpl implements RoleService{
 
