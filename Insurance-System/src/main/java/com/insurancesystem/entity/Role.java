@@ -1,37 +1,45 @@
 package com.insurancesystem.entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-//Define a Role entity to manage permissions like USER, ADMIN, UNDERWRITER for authorization checks.
+
 /**
+<<<<<<< HEAD
+=======
+ * Entity representing user roles such as ADMIN, USER, or UNDERWRITER. Includes
+ * role name, description, and user mapping.
+ *
+>>>>>>> aeb0ebb9f66718fd665201b34385c680e03dece0
  * @author Nikita Mahajan
  * @since 2025-10-20
  * @description This class handles Role entities.
  */
 @Entity
-@Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = "roleName") }) // Prevent duplicate role
-																							// names at DB level
+@Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = "roleName") })
+
 public class Role {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long roleId;
-	@NotBlank(message="role name must be required")
+
+	@NotBlank(message = "Role name is required")
 	@Size(min = 3, max = 20, message = "Role name must be between 3 and 20 characters")
 	@Column(nullable = false, unique = true)
 	private String roleName;
-	@NotBlank(message="description does not empty")
+
+	@NotBlank(message = "Description cannot be empty")
 	@Column(nullable = false)
 	private String description;
 
+	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+	//@JsonManagedReference
+	private List<UserRegistration> userList;
+
 	public Role() {
-       
 	}
 
 	public Role(Long roleId, String roleName, String description) {
@@ -64,9 +72,16 @@ public class Role {
 		this.description = description;
 	}
 
+	public List<UserRegistration> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(List<UserRegistration> userList) {
+		this.userList = userList;
+	}
+
 	@Override
 	public String toString() {
 		return "Role [roleId=" + roleId + ", roleName=" + roleName + ", description=" + description + "]";
 	}
-
 }

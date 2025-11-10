@@ -15,7 +15,11 @@ import com.insurancesystem.repository.UserAddressRepository;
 import com.insurancesystem.service.UserAddressService;
 
 @Service
+<<<<<<< HEAD
 public class UserAddressServiceImpl implements UserAddressService{
+=======
+public class UserAddressServiceImpl implements UserAddressService {
+>>>>>>> aeb0ebb9f66718fd665201b34385c680e03dece0
 
 	@Autowired
 	private final UserAddressRepository repository;

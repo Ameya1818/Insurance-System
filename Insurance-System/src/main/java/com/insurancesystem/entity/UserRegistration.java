@@ -1,15 +1,15 @@
 package com.insurancesystem.entity;
 
 import java.time.LocalDate;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
-
-public class User {
+public class UserRegistration {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +26,12 @@ public class User {
 
 	@ManyToOne
 	@JoinColumn(name = "roleId")
-
+	//@JsonBackReference
 	private Role role;
+
+	@OneToOne(mappedBy = "user")
+	@JsonIgnore
+	private Profile profile;
 
 	// Getters & Setters
 	public long getUserId() {
@@ -84,6 +88,14 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public Profile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 
 	@Override
