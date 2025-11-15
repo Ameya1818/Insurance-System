@@ -40,4 +40,21 @@ public class AuthController {
 
 		return ResponseEntity.ok(response);
 	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
+	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+	        return ResponseEntity.status(401).body(Map.of("error", "Missing or invalid token"));
+	    }
+
+	    String token = authHeader.substring(7);
+
+	    boolean isLoggedOut = authService.logoutUser(token);
+	    if (isLoggedOut) {
+	        return ResponseEntity.ok(Map.of("message", "Logout successful"));
+	    } else {
+	        return ResponseEntity.status(400).body(Map.of("error", "Invalid or already logged-out token"));
+	    }
+	}
+
 }

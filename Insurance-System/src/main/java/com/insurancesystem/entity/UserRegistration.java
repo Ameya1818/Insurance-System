@@ -26,7 +26,7 @@ public class UserRegistration {
 
 	@ManyToOne
 	@JoinColumn(name = "roleId")
-	//@JsonBackReference
+	@JsonBackReference
 	private Role role;
 
 	@OneToOne(mappedBy = "user")

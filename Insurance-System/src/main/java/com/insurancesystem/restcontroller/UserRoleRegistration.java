@@ -17,15 +17,14 @@ public class UserRoleRegistration {
 	@Autowired
 	private RoleService roleService;
 
-	/*
-	 * @Autowired private PasswordEncoder passwordEncoder;
-	 */
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@PostMapping("/register")
 	public ResponseEntity<Role> saveRoleUser(@RequestBody Role role) {
 		if (role.getUserList() != null) {
 			for (UserRegistration user : role.getUserList()) {
-				//user.setPassword(passwordEncoder.encode(user.getPassword())); // encode password
+				user.setPassword(passwordEncoder.encode(user.getPassword())); // encode password
 
 				user.setRole(role);
 

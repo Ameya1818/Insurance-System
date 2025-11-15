@@ -11,9 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.insurancesystem.entity.Login;
+import com.insurancesystem.entity.Session;
 import com.insurancesystem.entity.UserRegistration;
 import com.insurancesystem.exception.InvalidCredentialsException;
 import com.insurancesystem.repository.LoginRepository;
+import com.insurancesystem.repository.SessionRepository;
 import com.insurancesystem.repository.UserRegistrationRepository;
 import com.insurancesystem.service.AuthService;
 import com.insurancesystem.utility.JwtUtil;
@@ -32,6 +34,9 @@ public class AuthServiceImpl implements AuthService {
 
 	@Autowired
 	private JwtUtil jwtUtil;
+
+	@Autowired
+	private SessionRepository sessionRepository;
 
 	@Override
 	public Login authenticateUser(String email, String password) {
@@ -53,7 +58,34 @@ public class AuthServiceImpl implements AuthService {
 		login.setIssuedAt(LocalDateTime.now()); // current time
 		login.setExpiresAt(LocalDateTime.now().plusMinutes(15)); // token valid for 15 mins
 
-		// Save login info in the database and return it
-		return loginRepository.save(login);
+		loginRepository.save(login);
+
+		// Save session info
+		Session session = new Session();
+		session.setUser(user);
+		session.setToken(token);
+		session.setLoginTime(LocalDateTime.now());
+		session.setActive(true);
+		sessionRepository.save(session);
+
+		return login;
 	}
+	
+	@Override
+	public boolean logoutUser(String token) {
+	    // Find session by token
+	    Session session = sessionRepository.findByToken(token).orElse(null);
+
+	    if (session == null || !session.isActive()) {
+	        return false;
+	    }
+
+	    // Mark session as inactive and set logout time
+	    session.setActive(false);
+	    session.setLogoutTime(LocalDateTime.now());
+	    sessionRepository.save(session);
+
+	    return true;
+	}
+
 }

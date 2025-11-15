@@ -8,4 +8,6 @@ import com.insurancesystem.entity.Login;
  */
 public interface AuthService {
 	Login authenticateUser(String email, String password);
+
+	boolean logoutUser(String token);
 }

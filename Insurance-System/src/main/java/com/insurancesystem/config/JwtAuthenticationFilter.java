@@ -10,7 +10,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.insurancesystem.entity.Session;
 import com.insurancesystem.entity.UserRegistration;
+import com.insurancesystem.repository.SessionRepository;
 import com.insurancesystem.repository.UserRegistrationRepository;
 import com.insurancesystem.utility.JwtUtil;
 
@@ -22,9 +24,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * This filter runs once for every request.
- * It checks the JWT token from the header, validates it,
- * and sets authentication if the token is valid.
+ * This filter runs once for every request. It checks the JWT token from the
+ * header, validates it, and sets authentication if the token is valid.
  */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -35,11 +36,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserRegistrationRepository userRepository;
 
+	@Autowired
+	private SessionRepository sessionRepository;
+
 	// Skip token validation for login and registration endpoints
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) {
 		String path = request.getServletPath();
-		return path.startsWith("/api/auth/") || path.equals("/api/register") || path.startsWith("/api/register/");
+		return path.startsWith("/api/auth/") || path.equals("/api/register") || path.startsWith("/api/register/")
+				|| path.startsWith("/api/notifications/");
 	}
 
 	@SuppressWarnings("deprecation")
@@ -47,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		// Allow CORS preflight requests to pass without checking token
+		// Allow requests to pass without checking token
 		if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
 			filterChain.doFilter(request, response);
 			return;
@@ -64,11 +69,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		// Remove "Bearer " prefix to get the actual token
 		token = header.substring(7);
 
 		try {
-			// Extract email (username) from token
+			// Extract email from token
 			email = jwtUtil.extractUsername(token);
 		} catch (ExpiredJwtException e) {
 			writeUnauthorized(response, "JWT token expired");
@@ -81,6 +85,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		} catch (Exception e) {
 			writeUnauthorized(response, "Token parsing error");
+			return;
+		}
+
+		Session session = sessionRepository.findByToken(token).orElse(null);
+		if (session == null || !session.isActive()) {
+			writeUnauthorized(response, "Session expired or logged out");
 			return;
 		}
 
