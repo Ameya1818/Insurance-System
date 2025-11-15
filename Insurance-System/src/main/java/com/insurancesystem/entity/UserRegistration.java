@@ -26,11 +26,11 @@ public class UserRegistration {
 
 	@ManyToOne
 	@JoinColumn(name = "roleId")
-	@JsonBackReference
+	//@JsonBackReference
 	private Role role;
 
 	@OneToOne(mappedBy = "user")
-	@JsonIgnore
+	//@JsonIgnore
 	private Profile profile;
 
 	// Getters & Setters
